@@ -13,18 +13,19 @@ class App extends Component {
 
 class Messenger extends Component {
     state = {
-        messages: ["haloo"]
+        messages: []
     };
 
-    socket = new WebSocket("ws://localhost:8081/ws");
+    socket = new WebSocket("ws://localhost:1324/ws");
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.socket.onmessage = this.writeSocketResponse
     }
 
     writeSocketResponse = (msg) => {
+        console.log(msg);
         const text = JSON.parse(msg.data).Text;
         this.setState((prevState) => {
             prevState.messages.push(text);
@@ -35,11 +36,6 @@ class Messenger extends Component {
 
     addMessage = (text) => {
         this.socket.send(JSON.stringify({"Text": text}));
-
-        this.setState((prevState) => {
-            prevState.messages.push(text);
-            return prevState;
-        })
     };
 
     render() {
